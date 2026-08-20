@@ -215,26 +215,31 @@ export function DNAHelix({ height = 300 }) {
 
 /* ─── Matrix data stream ─── */
 export function DataStream({ cols = 6, height = 200 }) {
-  const chars = '₹%@#ABCD0123456789LOAN EMI CIBIL RATE DEBT'.split('')
-  const streams = useMemo(() => Array.from({ length: cols }, (_, i) => ({
-    id: i, chars: Array.from({ length: 12 }, () => chars[Math.floor(Math.random() * chars.length)]),
-    dur: 1.5 + Math.random() * 2, delay: Math.random() * 2, opacity: 0.3 + Math.random() * 0.5
-  })), [cols])
+  const CHARS = ['₹','%','8','A','0','L','E','C','R','D','7','B','#','9','1']
   return (
-    <div className="flex gap-2 overflow-hidden" style={{ height }}>
-      {streams.map(s => (
-        <div key={s.id} className="flex flex-col gap-1 overflow-hidden" style={{ opacity: s.opacity }}>
-          {s.chars.map((ch, j) => (
-            <span key={j} className="mono text-xs block"
-              style={{
-                color: 'rgba(34,211,238,0.7)', textShadow: '0 0 6px rgba(34,211,238,0.8)',
-                animation: `dataFall ${s.dur}s linear ${s.delay + j * 0.1}s infinite`
+    <div style={{ display: 'flex', gap: 8, overflow: 'hidden', height, position: 'relative' }}>
+      {Array.from({ length: cols }, (_, ci) => {
+        const dur = 1.8 + ci * 0.4
+        const delay = ci * 0.25
+        const opacity = 0.4 + (ci % 3) * 0.15
+        return (
+          <div key={ci} style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1, overflow: 'hidden', opacity }}>
+            {Array.from({ length: 8 }, (_, ri) => (
+              <span key={ri} style={{
+                fontFamily: "'JetBrains Mono',monospace",
+                fontSize: 11,
+                color: 'rgba(34,211,238,0.8)',
+                textShadow: '0 0 6px rgba(34,211,238,0.6)',
+                display: 'block',
+                animation: `dataFall ${dur}s linear ${delay + ri * 0.15}s infinite`,
+                userSelect: 'none',
               }}>
-              {ch}
-            </span>
-          ))}
-        </div>
-      ))}
+                {CHARS[(ci * 3 + ri) % CHARS.length]}
+              </span>
+            ))}
+          </div>
+        )
+      })}
     </div>
   )
 }

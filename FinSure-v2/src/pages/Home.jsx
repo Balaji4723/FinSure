@@ -84,9 +84,9 @@ export default function Home() {
         <motion.div initial={{ opacity:0, scale:.85 }} animate={{ opacity:1, scale:1 }} transition={{ duration:1, delay:.3 }}
           className="flex-shrink-0 flex flex-col items-center gap-5 hidden lg:flex">
           <Globe3D size={typeof window !== 'undefined' && window.innerWidth < 768 ? 270 : 360} />
-          <div className="glass rounded-2xl p-4 scanline-wrap" style={{ width:260 }}>
-            <div className="label-mono mb-2 text-center" style={{ fontSize:'9px' }}>Live Financial Data</div>
-            <DataStream cols={7} height={70}/>
+          <div className="glass rounded-2xl p-4" style={{ width:260 }}>
+            <div className="label-mono mb-3 text-center" style={{ fontSize:'9px' }}>Live Financial Data</div>
+            <DataStream cols={8} height={80}/>
           </div>
         </motion.div>
       </motion.section>
