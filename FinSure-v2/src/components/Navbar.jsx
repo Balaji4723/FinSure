@@ -6,7 +6,6 @@ import { useStore } from '../store/useStore'
 // Only primary nav — everything else in the 3-dot menu
 const PRIMARY = [
   { label: 'Home', href: '/' },
-  { label: 'FinAI', href: '/ai' },
 ]
 
 const MENU_GROUPS = [
@@ -20,6 +19,7 @@ const MENU_GROUPS = [
       { label: 'Loan Recommender', href: '/recommend' },
     ]
   },
+  // FinAI is now a floating drawer — accessible on every page
   {
     title: 'Tools',
     links: [

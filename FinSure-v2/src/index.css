@@ -71,3 +71,52 @@ input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;bac
 @media(max-width:768px){.fin-input{padding:14px 16px;font-size:16px}}
 button:focus-visible,a:focus-visible{outline:2px solid rgba(34,211,238,0.5);outline-offset:2px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+
+/* ── Bento grid responsive ── */
+@media (max-width: 768px) {
+  .bento-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .bento-grid > div {
+    grid-column: span 1 !important;
+    grid-row: span 1 !important;
+  }
+  .compact-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-column: 1 / -1 !important;
+  }
+  .md-grid-4 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .compact-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  .md-grid-4 {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .md-grid-4 {
+    grid-template-columns: repeat(4, 1fr) !important;
+  }
+}
+
+/* ── FinAI drawer scrollbar ── */
+.finai-messages::-webkit-scrollbar { width: 3px; }
+.finai-messages::-webkit-scrollbar-track { background: transparent; }
+.finai-messages::-webkit-scrollbar-thumb { background: rgba(34,211,238,0.3); border-radius: 2px; }
+
+/* ── Floating button pulse ring ── */
+@keyframes pulseRing {
+  0% { box-shadow: 0 0 0 0 rgba(34,211,238,0.4); }
+  70% { box-shadow: 0 0 0 14px rgba(34,211,238,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,211,238,0); }
+}
+.finai-fab { animation: pulseRing 2.5s ease-out infinite; }
