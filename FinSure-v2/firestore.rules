@@ -1,0 +1,84 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper: check if user is authenticated
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // Helper: check if user owns the document
+    function isOwner() {
+      return request.auth.token.email == resource.data.userEmail;
+    }
+
+    // Helper: validate string fields
+    function validString(field) {
+      return field is string && field.size() < 2000;
+    }
+
+    // Loan feasibility reports — user can only read/write their own
+    match /reports/{docId} {
+      allow create: if isAuth()
+        && validString(request.resource.data.userEmail)
+        && request.resource.data.userEmail == request.auth.token.email;
+      allow read, delete: if isAuth() && isOwner();
+      allow update: if false; // reports are immutable
+    }
+
+    // EMI reports — same rules
+    match /emiReports/{docId} {
+      allow create: if isAuth()
+        && request.resource.data.userEmail == request.auth.token.email;
+      allow read, delete: if isAuth() && isOwner();
+      allow update: if false;
+    }
+
+    // Eligibility reports — same rules
+    match /eligibilityReports/{docId} {
+      allow create: if isAuth()
+        && request.resource.data.userEmail == request.auth.token.email;
+      allow read, delete: if isAuth() && isOwner();
+      allow update: if false;
+    }
+
+    // AI chats — user can only read/write their own
+    match /aiChats/{docId} {
+      allow create: if isAuth()
+        && request.resource.data.userEmail == request.auth.token.email;
+      allow read: if isAuth() && isOwner();
+      allow update, delete: if false;
+    }
+
+    // Goals — user can read/write/delete their own
+    match /goals/{docId} {
+      allow create: if isAuth()
+        && request.resource.data.userEmail == request.auth.token.email;
+      allow read, delete: if isAuth() && isOwner();
+      allow update: if isAuth() && isOwner();
+    }
+
+    // Recommendations — user can only read/write their own
+    match /recommendations/{docId} {
+      allow create: if isAuth()
+        && request.resource.data.userEmail == request.auth.token.email;
+      allow read: if isAuth() && isOwner();
+      allow update, delete: if false;
+    }
+
+    // Leaderboard — anyone authenticated can read all (it's public rankings)
+    // but can only write/update their own entry
+    match /leaderboard/{userId} {
+      allow read: if isAuth();
+      allow create, update: if isAuth()
+        && request.auth.uid == userId
+        && request.resource.data.email == request.auth.token.email;
+      allow delete: if false;
+    }
+
+    // Deny all other access by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

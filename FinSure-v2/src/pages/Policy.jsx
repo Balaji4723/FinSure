@@ -50,6 +50,9 @@ export default function Policy() {
 
   const analyzeLoan = async () => {
     if (!loanType) return
+    if (salary <= 0 || salary > 10000000) return
+    if (loanAmount <= 0 || loanAmount > 100000000) return
+    if (tenure <= 0 || tenure > 30) return
     setLoading(true)
     const interest = RATES[loanType] || 10
     const mRate = interest / 12 / 100

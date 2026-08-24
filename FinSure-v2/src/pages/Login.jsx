@@ -24,6 +24,13 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault()
+    // Input validation
+    if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setMsg({ text: 'Please enter a valid email address.', ok: false }); return
+    }
+    if (!pw || pw.length < 6 || pw.length > 128) {
+      setMsg({ text: 'Password must be between 6 and 128 characters.', ok: false }); return
+    }
     setLoading(true); setMsg({ text: '', ok: false })
     try {
       await signInWithEmailAndPassword(auth, email, password)

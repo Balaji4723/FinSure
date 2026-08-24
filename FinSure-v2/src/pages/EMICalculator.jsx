@@ -63,6 +63,9 @@ export default function EMICalculator() {
     : 'Balanced loan profile. Your EMI-to-income ratio looks healthy for this loan structure.'
 
   const saveReport = async () => {
+    if (loanAmount <= 0 || loanAmount > 100000000) return
+    if (interestRate <= 0 || interestRate > 50) return
+    if (tenure <= 0 || tenure > 30) return
     setSaving(true)
     try {
       await addDoc(collection(db, 'emiReports'), {
