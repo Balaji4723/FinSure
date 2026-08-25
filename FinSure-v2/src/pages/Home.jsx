@@ -496,7 +496,6 @@ export default function Home() {
                 { title:'Debt Planner',       desc:'Snowball or avalanche debt strategy',      route:'/tools',       color:C.pink   },
                 { title:'Retirement SIP',     desc:'Compound interest corpus projector',       route:'/tools',       color:C.orange },
                 { title:'Report Card',        desc:'Shareable PNG of your FinDNA score',      route:'/report-card', color:C.cyan   },
-                { title:'Leaderboard',        desc:'Global anonymous FinScore rankings',       route:'/leaderboard', color:C.yellow },
               ].map((t, i) => (
                 <motion.div key={t.title}
                   initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}

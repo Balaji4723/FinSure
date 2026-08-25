@@ -3,11 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '../components/Navbar'
 import { PageShell, SliderInput, AnimNum, LiquidBar, BackBtn, SectionHeader } from '../components/UI'
 import { useStore } from '../store/useStore'
-import { BADGE_DEFS } from '../utils/badges'
 
 /* ── Tax Calculator (Sec 80C + 24B) ── */
 function TaxCalculator() {
-  const { addBadge } = useStore()
   const [loanAmount, setLoanAmount] = useState(3000000)
   const [rate, setRate] = useState(8.5)
   const [salary, setSalary] = useState(1200000)
@@ -66,7 +64,6 @@ function TaxCalculator() {
 
 /* ── Prepayment Optimizer ── */
 function PrepaymentOptimizer() {
-  const { addBadge } = useStore()
   const [loan, setLoan] = useState(3000000)
   const [rate, setRate] = useState(8.5)
   const [tenure, setTenure] = useState(20)
@@ -170,7 +167,6 @@ function RetirementCalc() {
 
 /* ── Debt Snowball / Avalanche ── */
 function DebtPlanner() {
-  const { addBadge } = useStore()
   const [debts, setDebts] = useState([
     { id:1, name:'Credit Card', balance:50000, rate:36, minPay:2000 },
     { id:2, name:'Personal Loan', balance:200000, rate:14, minPay:5000 },
@@ -192,7 +188,7 @@ function DebtPlanner() {
         <div className="label-mono">Debt Elimination Planner</div>
         <div className="flex gap-2">
           {['avalanche', 'snowball'].map(m => (
-            <button key={m} onClick={() => { setMethod(m); addBadge(BADGE_DEFS.find(b=>b.id==='debt_free_path')) }}
+            <button key={m} onClick={() => setMethod(m)}
               className={`px-4 py-2 rounded-xl text-sm font-semibold capitalize transition-all ${method===m?'btn-primary':'btn-outline'}`}>
               {m}
             </button>
@@ -230,7 +226,7 @@ function DebtPlanner() {
 
 /* ── Net Worth Tracker ── */
 function NetWorthTracker() {
-  const { netWorth, setNetWorth, addBadge } = useStore()
+  const { netWorth, setNetWorth } = useStore()
   const [assets, setAssets] = useState(netWorth.assets.length ? netWorth.assets : [
     { id:1, label:'Savings Account', value:200000 },
     { id:2, label:'Mutual Funds', value:500000 },
@@ -245,7 +241,7 @@ function NetWorthTracker() {
   const totalL = liabilities.reduce((s,l) => s+l.value, 0)
   const netW = totalA - totalL
 
-  const save = () => { setNetWorth({ assets, liabilities }); addBadge(BADGE_DEFS.find(b=>b.id==='net_worth_tracker')) }
+  const save = () => { setNetWorth({ assets, liabilities }) }
 
   const update = (list, setList, id, field, val) => setList(list.map(i => i.id===id ? {...i,[field]:val} : i))
 
@@ -318,7 +314,7 @@ export default function Tools() {
             <button key={t.id} onClick={() => setActive(t.id)}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all"
               style={{ background:active===t.id?'var(--cyan)':'transparent', color:active===t.id?'#020a12':'var(--text-secondary)', border:'none', cursor:'pointer', fontFamily:"'Space Grotesk',sans-serif" }}>
-              t.label
+              {t.label}
             </button>
           ))}
         </div>

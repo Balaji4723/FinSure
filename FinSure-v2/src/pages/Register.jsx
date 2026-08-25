@@ -97,6 +97,17 @@ export default function Register() {
         className="glass holo-card rounded-3xl p-8 md:p-10 w-full max-w-md relative z-10"
         style={{ boxShadow: '0 0 80px rgba(129,140,248,0.08)' }}>
 
+        {/* Back button */}
+        <button onClick={() => navigate('/')}
+          style={{ position:'absolute', top:16, left:16, display:'flex', alignItems:'center', gap:6,
+            color:'var(--text-muted)', background:'none', border:'none', cursor:'pointer', fontSize:13, fontFamily:'Inter,sans-serif' }}
+          onMouseEnter={e=>e.currentTarget.style.color='var(--cyan)'}
+          onMouseLeave={e=>e.currentTarget.style.color='var(--text-muted)'}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M11 7H3M7 11L3 7l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Back
+        </button>
         {/* Logo */}
         <div className="flex justify-center mb-7">
           <div className="w-12 h-12 rounded-2xl flex items-center justify-center"

@@ -12,12 +12,10 @@ const Policy       = lazy(() => import('./pages/Policy'))
 const History      = lazy(() => import('./pages/History'))
 const Compare      = lazy(() => import('./pages/Compare'))
 const Tools        = lazy(() => import('./pages/Tools'))
-const Dashboard    = lazy(() => import('./pages/Dashboard'))
 const Recommend    = lazy(() => import('./pages/Recommend'))
 const GoalSetter   = lazy(() => import('./pages/GoalSetter'))
 const CreditBooster = lazy(() => import('./pages/CreditBooster'))
 const ReportCard   = lazy(() => import('./pages/ReportCard'))
-const Leaderboard  = lazy(() => import('./pages/Leaderboard'))
 
 function Guard({ children }) {
   return localStorage.getItem('loggedIn') === 'true'
@@ -61,12 +59,10 @@ function AppInner() {
           <Route path="/history"      element={<Guard><History /></Guard>} />
           <Route path="/compare"      element={<Guard><Compare /></Guard>} />
           <Route path="/tools"        element={<Guard><Tools /></Guard>} />
-          <Route path="/dashboard"    element={<Guard><Dashboard /></Guard>} />
           <Route path="/recommend"    element={<Guard><Recommend /></Guard>} />
           <Route path="/goals"        element={<Guard><GoalSetter /></Guard>} />
           <Route path="/credit"       element={<Guard><CreditBooster /></Guard>} />
           <Route path="/report-card"  element={<Guard><ReportCard /></Guard>} />
-          <Route path="/leaderboard"  element={<Guard><Leaderboard /></Guard>} />
           <Route path="*"             element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>

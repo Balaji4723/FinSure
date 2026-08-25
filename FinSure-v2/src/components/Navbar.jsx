@@ -1,12 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useStore } from '../store/useStore'
 
-// Only primary nav — everything else in the 3-dot menu
-const PRIMARY = [
-  { label: 'Home', href: '/' },
-]
+const PRIMARY = [{ label: 'Home', href: '/' }]
 
 const MENU_GROUPS = [
   {
@@ -19,7 +15,6 @@ const MENU_GROUPS = [
       { label: 'Loan Recommender', href: '/recommend' },
     ]
   },
-  // FinAI is now a floating drawer — accessible on every page
   {
     title: 'Tools',
     links: [
@@ -30,11 +25,9 @@ const MENU_GROUPS = [
     ]
   },
   {
-    title: 'You',
+    title: 'Account',
     links: [
-      { label: 'Dashboard', href: '/dashboard' },
-      { label: 'Leaderboard', href: '/leaderboard' },
-      { label: 'History', href: '/history' },
+      { label: 'Report History', href: '/history' },
     ]
   },
 ]
@@ -45,7 +38,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [loggedIn, setLoggedIn] = useState(localStorage.getItem('loggedIn') === 'true')
-  const { streak } = useStore()
   const menuRef = useRef()
 
   useEffect(() => {
@@ -56,12 +48,16 @@ export default function Navbar() {
 
   useEffect(() => { setMenuOpen(false) }, [location])
 
-  // Close on outside click
   useEffect(() => {
     const fn = (e) => { if (menuRef.current && !menuRef.current.contains(e.target)) setMenuOpen(false) }
     document.addEventListener('mousedown', fn)
     return () => document.removeEventListener('mousedown', fn)
   }, [])
+
+  // Sync login state on route change
+  useEffect(() => {
+    setLoggedIn(localStorage.getItem('loggedIn') === 'true')
+  }, [location])
 
   const logout = () => {
     localStorage.removeItem('loggedIn')
@@ -88,7 +84,7 @@ export default function Navbar() {
               <path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="#020a12"/>
             </svg>
           </div>
-          <span style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 800, fontSize: '1.3rem', color: 'var(--cyan)', letterSpacing: '-.02em' }}>
+          <span style={{ fontFamily:"'Space Grotesk',sans-serif", fontWeight:800, fontSize:'1.3rem', color:'var(--cyan)', letterSpacing:'-.02em' }}>
             FinSure
           </span>
         </Link>
@@ -96,33 +92,19 @@ export default function Navbar() {
         {/* Right side */}
         <div className="flex items-center gap-3">
 
-          {/* Primary links — only on desktop */}
+          {/* Home link desktop */}
           <div className="hidden md:flex items-center gap-1">
             {PRIMARY.map(n => (
               <Link key={n.href} to={n.href} style={{ textDecoration: 'none' }}>
                 <div className="px-4 py-2 rounded-xl text-sm font-medium transition-all"
-                  style={{
-                    color: location.pathname === n.href ? 'var(--cyan)' : 'var(--text-secondary)',
-                    background: location.pathname === n.href ? 'rgba(34,211,238,0.08)' : 'transparent',
-                    cursor: 'pointer',
-                  }}
+                  style={{ color: location.pathname === n.href ? 'var(--cyan)' : 'var(--text-secondary)', background: location.pathname === n.href ? 'rgba(34,211,238,0.08)' : 'transparent', cursor: 'pointer' }}
                   onMouseEnter={e => { if (location.pathname !== n.href) e.currentTarget.style.color = 'var(--text-primary)' }}
-                  onMouseLeave={e => { if (location.pathname !== n.href) e.currentTarget.style.color = 'var(--text-secondary)' }}
-                >{n.label}</div>
+                  onMouseLeave={e => { if (location.pathname !== n.href) e.currentTarget.style.color = 'var(--text-secondary)' }}>
+                  {n.label}
+                </div>
               </Link>
             ))}
           </div>
-
-          {/* Streak badge */}
-          {loggedIn && streak > 0 && (
-            <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold"
-              style={{ background: 'rgba(251,146,60,0.1)', border: '1px solid rgba(251,146,60,0.2)', color: '#fb923c' }}>
-              <svg width="11" height="13" viewBox="0 0 12 16" fill="#fb923c">
-                <path d="M6 0C3 4 1 6 1 9a5 5 0 0010 0C11 6 9 4 6 0zm0 14a3 3 0 01-3-3c0-2 2-4 3-6 1 2 3 4 3 6a3 3 0 01-3 3z"/>
-              </svg>
-              {streak}
-            </div>
-          )}
 
           {/* Auth buttons */}
           {!loggedIn ? (
@@ -134,72 +116,50 @@ export default function Navbar() {
             <button onClick={logout} className="btn-danger px-4 py-2 text-sm">Logout</button>
           )}
 
-          {/* 3-dot menu button */}
+          {/* 3-dot menu */}
           <div className="relative" ref={menuRef}>
-            <button
-              onClick={() => setMenuOpen(prev => !prev)}
+            <button onClick={() => setMenuOpen(prev => !prev)}
               className="flex flex-col items-center justify-center gap-1 w-9 h-9 rounded-xl transition-all"
-              style={{
-                background: menuOpen ? 'rgba(34,211,238,0.12)' : 'rgba(34,211,238,0.06)',
-                border: '1px solid rgba(34,211,238,0.2)',
-                cursor: 'pointer',
-              }}
-              aria-label="Open navigation menu">
+              style={{ background: menuOpen ? 'rgba(34,211,238,0.12)' : 'rgba(34,211,238,0.06)', border: '1px solid rgba(34,211,238,0.2)', cursor: 'pointer' }}>
               {[0,1,2].map(i => (
                 <div key={i} className="w-1 h-1 rounded-full"
                   style={{ background: menuOpen ? 'var(--cyan)' : 'var(--text-secondary)' }} />
               ))}
             </button>
 
-            {/* Dropdown mega menu */}
             <AnimatePresence>
               {menuOpen && (
                 <motion.div
-                  initial={{ opacity: 0, scale: 0.95, y: -8 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95, y: -8 }}
-                  transition={{ duration: 0.18, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  initial={{ opacity:0, scale:0.95, y:-8 }}
+                  animate={{ opacity:1, scale:1, y:0 }}
+                  exit={{ opacity:0, scale:0.95, y:-8 }}
+                  transition={{ duration:0.18 }}
                   className="absolute right-0 top-12 glass rounded-2xl overflow-hidden"
-                  style={{
-                    width: 320,
-                    boxShadow: '0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,211,238,0.15)',
-                    zIndex: 100,
-                  }}>
+                  style={{ width:300, boxShadow:'0 24px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,211,238,0.15)', zIndex:100 }}>
 
-                  {/* Header */}
-                  <div className="px-5 py-4 border-b" style={{ borderColor: 'rgba(34,211,238,0.08)' }}>
-                    <div className="label-mono" style={{ color: 'var(--text-muted)' }}>Navigate</div>
+                  <div className="px-5 py-4 border-b" style={{ borderColor:'rgba(34,211,238,0.08)' }}>
+                    <div className="label-mono" style={{ color:'var(--text-muted)' }}>Navigate</div>
                   </div>
 
-                  {/* Groups */}
                   <div className="p-4 space-y-5 max-h-96 overflow-y-auto">
                     {MENU_GROUPS.map(group => (
                       <div key={group.title}>
-                        <div className="label-mono mb-2" style={{ fontSize: '9px', color: 'var(--text-muted)' }}>{group.title}</div>
+                        <div className="label-mono mb-2" style={{ fontSize:'9px', color:'var(--text-muted)' }}>{group.title}</div>
                         <div className="space-y-0.5">
                           {group.links.map(link => {
                             const active = location.pathname === link.href
                             return (
-                              <Link key={link.href} to={link.href} style={{ textDecoration: 'none' }}>
+                              <Link key={link.href} to={link.href} style={{ textDecoration:'none' }}>
                                 <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all"
-                                  style={{
-                                    background: active ? 'rgba(34,211,238,0.1)' : 'transparent',
-                                    cursor: 'pointer',
-                                  }}
-                                  onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(34,211,238,0.05)' }}
-                                  onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}>
-                                  {/* Active indicator */}
+                                  style={{ background: active ? 'rgba(34,211,238,0.1)' : 'transparent', cursor:'pointer' }}
+                                  onMouseEnter={e => { if(!active) e.currentTarget.style.background='rgba(34,211,238,0.05)' }}
+                                  onMouseLeave={e => { if(!active) e.currentTarget.style.background='transparent' }}>
                                   <div className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                                     style={{ background: active ? 'var(--cyan)' : 'rgba(34,211,238,0.2)' }} />
                                   <span className="text-sm font-medium"
                                     style={{ color: active ? 'var(--cyan)' : 'var(--text-secondary)' }}>
                                     {link.label}
                                   </span>
-                                  {active && (
-                                    <svg className="ml-auto" width="12" height="12" viewBox="0 0 12 12" fill="none">
-                                      <path d="M2 6h8M6 2l4 4-4 4" stroke="var(--cyan)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                    </svg>
-                                  )}
                                 </div>
                               </Link>
                             )
@@ -209,8 +169,8 @@ export default function Navbar() {
                     ))}
                   </div>
 
-                  {/* Footer - mobile auth */}
-                  <div className="px-4 pb-4 md:hidden border-t pt-4" style={{ borderColor: 'rgba(34,211,238,0.08)' }}>
+                  {/* Mobile auth */}
+                  <div className="px-4 pb-4 md:hidden border-t pt-4" style={{ borderColor:'rgba(34,211,238,0.08)' }}>
                     {!loggedIn ? (
                       <div className="flex gap-3">
                         <Link to="/login" className="flex-1"><button className="btn-outline w-full py-2.5 text-sm">Login</button></Link>

@@ -8,61 +8,49 @@ export const useStore = create(
       user: null,
       setUser: (user) => set({ user }),
 
-      // Badges earned
-      badges: [],
-      addBadge: (badge) => {
-        const existing = get().badges.find(b => b.id === badge.id)
-        if (!existing) set({ badges: [...get().badges, { ...badge, earnedAt: new Date().toISOString() }] })
-      },
-
-      // Streak
-      streak: 0,
-      lastVisit: null,
-      updateStreak: () => {
-        const today = new Date().toDateString()
-        const last = get().lastVisit
-        if (last === today) return
-        const yesterday = new Date(Date.now() - 86400000).toDateString()
-        set({
-          streak: last === yesterday ? get().streak + 1 : 1,
-          lastVisit: today
-        })
-      },
-
-      // Financial goal
-      goal: null,
-      setGoal: (goal) => set({ goal }),
-
-      // Net worth entries
-      netWorth: { assets: [], liabilities: [] },
-      setNetWorth: (nw) => set({ netWorth: nw }),
-
-      // Risk profile
-      riskProfile: null,
-      setRiskProfile: (profile) => set({ riskProfile: profile }),
-
-      // Bank rates cache
-      bankRates: null,
-      setBankRates: (rates) => set({ bankRates: rates }),
-      ratesLastFetched: null,
-      setRatesLastFetched: (t) => set({ ratesLastFetched: t }),
-
-      // FinScore for leaderboard
-      finScore: 0,
-      setFinScore: (s) => set({ finScore: s }),
-
-      // Reports count for gamification
+      // Reports count
       reportsCount: 0,
       incrementReports: () => set({ reportsCount: get().reportsCount + 1 }),
 
-      // Session timeout
-      lastActivity: Date.now(),
-      updateActivity: () => set({ lastActivity: Date.now() }),
+      // Risk profile
+      riskProfile: null,
+      setRiskProfile: (p) => set({ riskProfile: p }),
+
+      // Goal
+      goal: null,
+      setGoal: (g) => set({ goal: g }),
+
+      // Net worth
+      netWorth: { assets: [], liabilities: [] },
+      setNetWorth: (nw) => set({ netWorth: nw }),
+
+      // Bank rates cache
+      bankRates: null,
+      bankRatesLastFetch: null,
+      setBankRates: (rates) => set({ bankRates: rates, bankRatesLastFetch: Date.now() }),
+
+      // FinScore
+      finScore: 0,
+      setFinScore: (s) => set({ finScore: s }),
+
+      // Stub functions that pages may call — kept for compatibility
+      updateStreak: () => {},
+      updateActivity: () => {},
+      addBadge: () => {},
+      streak: 0,
+      badges: [],
     }),
-    { name: 'finsure-store', partialize: (s) => ({
-      badges: s.badges, streak: s.streak, lastVisit: s.lastVisit,
-      goal: s.goal, netWorth: s.netWorth, riskProfile: s.riskProfile,
-      finScore: s.finScore, reportsCount: s.reportsCount
-    })}
+    {
+      name: 'finsure-store',
+      partialize: (state) => ({
+        reportsCount: state.reportsCount,
+        riskProfile: state.riskProfile,
+        goal: state.goal,
+        netWorth: state.netWorth,
+        bankRates: state.bankRates,
+        bankRatesLastFetch: state.bankRatesLastFetch,
+        finScore: state.finScore,
+      })
+    }
   )
 )
