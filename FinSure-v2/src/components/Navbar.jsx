@@ -27,6 +27,7 @@ const MENU_GROUPS = [
   {
     title: 'Account',
     links: [
+      { label: 'My Profile', href: '/profile' },
       { label: 'Report History', href: '/history' },
     ]
   },
@@ -113,7 +114,18 @@ export default function Navbar() {
               <Link to="/register"><button className="btn-primary px-4 py-2 text-sm">Register</button></Link>
             </>
           ) : (
-            <button onClick={logout} className="btn-danger px-4 py-2 text-sm">Logout</button>
+            <div className="flex items-center gap-2">
+              <Link to="/profile">
+                <div style={{ width:34, height:34, borderRadius:10, background:'linear-gradient(135deg,var(--cyan),#818cf8)', display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', fontSize:13, fontWeight:700, fontFamily:"'Space Grotesk',sans-serif", color:'#020a12' }}
+                  title="My Profile">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                  </svg>
+                </div>
+              </Link>
+              <button onClick={logout} className="btn-danger px-4 py-2 text-sm">Logout</button>
+            </div>
           )}
 
           {/* 3-dot menu */}

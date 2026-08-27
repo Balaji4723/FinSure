@@ -28,7 +28,7 @@ export default function Login() {
     if (!email || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setMsg({ text: 'Please enter a valid email address.', ok: false }); return
     }
-    if (!pw || pw.length < 6 || pw.length > 128) {
+    if (!password || password.length < 6 || password.length > 128) {
       setMsg({ text: 'Password must be between 6 and 128 characters.', ok: false }); return
     }
     setLoading(true); setMsg({ text: '', ok: false })
@@ -85,6 +85,18 @@ export default function Login() {
         transition={{ duration: 0.5, ease: [.25, .46, .45, .94] }}
         className="glass holo-card rounded-3xl p-8 md:p-12 w-full max-w-md relative z-10"
         style={{ boxShadow: '0 0 80px rgba(34,211,238,0.08)' }}>
+
+        {/* Back button */}
+        <button onClick={() => navigate('/')}
+          style={{ position:'absolute', top:16, left:20, display:'flex', alignItems:'center', gap:6,
+            color:'var(--text-muted)', background:'none', border:'none', cursor:'pointer', fontSize:13 }}
+          onMouseEnter={e=>e.currentTarget.style.color='var(--cyan)'}
+          onMouseLeave={e=>e.currentTarget.style.color='var(--text-muted)'}>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M11 7H3M7 11L3 7l4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          Back
+        </button>
 
         {/* Logo */}
         <div className="flex justify-center mb-8">

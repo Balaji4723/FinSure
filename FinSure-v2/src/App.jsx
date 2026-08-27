@@ -15,6 +15,7 @@ const Tools        = lazy(() => import('./pages/Tools'))
 const Recommend    = lazy(() => import('./pages/Recommend'))
 const GoalSetter   = lazy(() => import('./pages/GoalSetter'))
 const CreditBooster = lazy(() => import('./pages/CreditBooster'))
+const Profile      = lazy(() => import('./pages/Profile'))
 const ReportCard   = lazy(() => import('./pages/ReportCard'))
 
 function Guard({ children }) {
@@ -62,7 +63,9 @@ function AppInner() {
           <Route path="/recommend"    element={<Guard><Recommend /></Guard>} />
           <Route path="/goals"        element={<Guard><GoalSetter /></Guard>} />
           <Route path="/credit"       element={<Guard><CreditBooster /></Guard>} />
+          <Route path="/profile"      element={<Guard><Profile /></Guard>} />
           <Route path="/report-card"  element={<Guard><ReportCard /></Guard>} />
+          <Route path="/profile"      element={<Guard><Profile /></Guard>} />
           <Route path="*"             element={<Navigate to="/" replace />} />
         </Routes>
       </Suspense>
