@@ -572,34 +572,52 @@ export default function Home() {
       {/* ══════════════════════════════════════════════
           S6 — FINAL CTA
       ══════════════════════════════════════════════ */}
-      <section id="s6" style={{ position: 'relative', minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-        <div className="orb-cyan" style={{ width: 500, height: 500, top: '50%', left: '50%', transform: 'translate(-50%,-50%)', zIndex: 0 }} />
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ duration: 0.8 }}
-          style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '60px 32px' }}>
-          <div style={{ fontSize: 10, fontFamily: "'Space Grotesk',sans-serif", fontWeight: 700,
-            letterSpacing: '0.16em', textTransform: 'uppercase', color: C.cyan, marginBottom: 16, opacity: 0.8 }}>
-            Ready to start?
+      <section id="s6" style={{ position: 'relative', background: 'rgba(4,15,26,0.8)', padding: '56px 32px', overflow: 'hidden' }}>
+        <div style={{ maxWidth: 960, margin: '0 auto' }}>
+          <motion.div initial={{ opacity:0, y:20 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }}
+            style={{ display:'grid', gridTemplateColumns:'repeat(2,1fr)', gap:'24px 40px', textAlign:'center', marginBottom:48 }} className="md-grid-4">
+            {[
+              { val:'10', label:'Real Indian Banks', color:C.cyan },
+              { val:'6.25%', label:'RBI Repo Rate', color:C.yellow },
+              { val:'11', label:'Financial Tools', color:C.green },
+              { val:'100%', label:'Data Privacy', color:C.purple },
+            ].map((s,i) => (
+              <motion.div key={i} initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }}
+                viewport={{ once:true }} transition={{ delay:i*0.1 }}>
+                <div style={{ fontFamily:"'Space Grotesk',sans-serif", fontWeight:800, fontSize:'clamp(1.8rem,4vw,3rem)', color:s.color, lineHeight:1 }}>{s.val}</div>
+                <div style={{ fontSize:12, color:'var(--text-muted)', marginTop:6 }}>{s.label}</div>
+              </motion.div>
+            ))}
+          </motion.div>
+          <div style={{ borderTop:'1px solid rgba(34,211,238,0.08)', paddingTop:40, display:'flex', flexWrap:'wrap', justifyContent:'space-between', gap:24 }}>
+            <div>
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
+                <div style={{ width:30, height:30, borderRadius:8, background:'var(--cyan)', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                  <svg width="14" height="14" viewBox="0 0 18 18" fill="none"><path d="M9 2L15.5 5.5V12.5L9 16L2.5 12.5V5.5L9 2Z" stroke="#020a12" strokeWidth="1.8" fill="none"/><path d="M9 6L12 8V12L9 14L6 12V8L9 6Z" fill="#020a12"/></svg>
+                </div>
+                <span style={{ fontFamily:"'Space Grotesk',sans-serif", fontWeight:800, fontSize:'1.1rem', color:'var(--cyan)' }}>FinSure</span>
+              </div>
+              <p style={{ fontSize:12, color:'var(--text-secondary)', maxWidth:260, lineHeight:1.6 }}>
+                Real bank data. AI intelligence. React + Firebase + Three.js.
+              </p>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'6px 40px', fontSize:12, alignContent:'start' }}>
+              {[
+                { l:'Email', h:'mailto:balajimaninadar4712@gmail.com', t:'balajimaninadar4712@gmail.com' },
+                { l:'GitHub', h:'https://github.com/Balaji4723', t:'Balaji4723' },
+                { l:'Portfolio', h:'https://balaji4723.github.io/PORTFOLIO-WEBSITE/', t:'Portfolio' },
+                { l:'LinkedIn', h:'https://www.linkedin.com/in/nadar-balaji-mani-murugan-27218a360', t:'Nadar Balaji' },
+              ].map(c => (
+                <div key={c.l}><span style={{ color:'var(--text-muted)' }}>{c.l}: </span>
+                  <a href={c.h} target="_blank" rel="noreferrer"
+                    style={{ color:'var(--text-secondary)', textDecoration:'none' }}
+                    onMouseEnter={e=>e.target.style.color='var(--cyan)'}
+                    onMouseLeave={e=>e.target.style.color='var(--text-secondary)'}>{c.t}</a>
+                </div>
+              ))}
+            </div>
           </div>
-          <h2 style={{ fontFamily: "'Space Grotesk',sans-serif", fontWeight: 800,
-            fontSize: 'clamp(2rem,5vw,4rem)', letterSpacing: '-0.04em', lineHeight: 1.05,
-            color: 'var(--text-primary)', marginBottom: 20 }}>
-            Decode your<br /><span className="shimmer-text">Financial DNA</span> today
-          </h2>
-          <p style={{ fontSize: 16, color: 'var(--text-secondary)', marginBottom: 36, maxWidth: 480, margin: '0 auto 36px' }}>
-            Free to use. Real bank data. AI-powered. No hidden fees.
-          </p>
-          <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <button onClick={() => goTo('/eligibility')} className="btn-primary glow-pulse"
-              style={{ padding: '16px 36px', fontSize: 16, boxShadow: `0 0 40px ${C.cyan}45` }}>
-              Get My FinDNA Score
-            </button>
-            <button onClick={() => navigate('/register')} className="btn-outline"
-              style={{ padding: '16px 36px', fontSize: 16 }}>
-              Create Free Account
-            </button>
-          </div>
-        </motion.div>
+        </div>
       </section>
 
       {/* ── Bank ticker ── */}

@@ -120,3 +120,12 @@ button:focus-visible,a:focus-visible{outline:2px solid rgba(34,211,238,0.5);outl
   100% { box-shadow: 0 0 0 0 rgba(34,211,238,0); }
 }
 .finai-fab { animation: pulseRing 2.5s ease-out infinite; }
+
+.shimmer-text {
+  background: linear-gradient(90deg, #22d3ee 0%, #a78bfa 30%, #f472b6 60%, #22d3ee 100%) !important;
+  background-size: 250% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  animation: shimmer 4s linear infinite !important;
+}
