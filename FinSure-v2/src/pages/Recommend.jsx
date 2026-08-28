@@ -32,14 +32,14 @@ function ScoreBar({ label, value, max, color }) {
 }
 
 export default function Recommend() {
-  const { addBadge } = useStore()
-  const [salary, setSalary] = useState(60000)
-  const [creditScore, setCreditScore] = useState(720)
-  const [age, setAge] = useState(30)
-  const [existingEMI, setExistingEMI] = useState(0)
-  const [loanType, setLoanType] = useState('Home Loan')
-  const [desiredAmount, setDesiredAmount] = useState(2500000)
-  const [employment, setEmployment] = useState('Salaried')
+  const { addBadge, userProfile } = useStore()
+  const [salary, setSalary] = useState(userProfile?.salary || 60000)
+  const [creditScore, setCreditScore] = useState(userProfile?.creditScore || 720)
+  const [age, setAge] = useState(userProfile?.age || 30)
+  const [existingEMI, setExistingEMI] = useState(userProfile?.existingEMI || 0)
+  const [loanType, setLoanType] = useState(userProfile?.loanType || 'Home Loan')
+  const [desiredAmount, setDesiredAmount] = useState(userProfile?.desiredLoan || 2500000)
+  const [employment, setEmployment] = useState(userProfile?.employment || 'Salaried')
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
 

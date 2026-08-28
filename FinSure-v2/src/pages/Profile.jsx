@@ -4,6 +4,7 @@ import { onAuthStateChanged, updateProfile, sendEmailVerification, signOut } fro
 import { collection, getDocs, query, where, orderBy, limit } from 'firebase/firestore'
 import { auth, db } from '../firebase'
 import { useNavigate, Link } from 'react-router-dom'
+import { useStore } from '../store/useStore'
 import Navbar from '../components/Navbar'
 import { PageShell, BackBtn, LiquidBar } from '../components/UI'
 
@@ -34,6 +35,9 @@ function StatCard({ val, label, color, icon }) {
 
 export default function Profile() {
   const navigate = useNavigate()
+  const { userProfile, setUserProfile } = useStore()
+  const [profileForm, setProfileForm] = useState(userProfile)
+  const [profileSaved, setProfileSaved] = useState(false)
   const [user, setUser] = useState(null)
   const [stats, setStats] = useState({ loans:0, emis:0, eligibility:0, goals:0 })
   const [recentReports, setRecentReports] = useState([])
@@ -222,6 +226,72 @@ export default function Profile() {
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Financial profile form */}
+          <div className="glass rounded-3xl p-6 md:p-8">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <div className="label-mono mb-1">Financial Profile</div>
+                <p style={{ fontSize:12, color:'var(--text-muted)' }}>Save once — all tools auto-fill with your details</p>
+              </div>
+              {profileSaved && (
+                <span style={{ fontSize:12, color:'#22c55e', display:'flex', alignItems:'center', gap:5 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" strokeWidth="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+                  Saved
+                </span>
+              )}
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { key:'salary', label:'Monthly Salary', type:'number', prefix:'₹', placeholder:'60000' },
+                { key:'creditScore', label:'CIBIL Score', type:'number', placeholder:'720', min:300, max:900 },
+                { key:'age', label:'Age', type:'number', placeholder:'30', min:18, max:70 },
+                { key:'existingEMI', label:'Existing Monthly EMI', type:'number', prefix:'₹', placeholder:'0' },
+                { key:'desiredLoan', label:'Desired Loan Amount', type:'number', prefix:'₹', placeholder:'2500000' },
+                { key:'city', label:'City', type:'text', placeholder:'Mumbai' },
+              ].map(f => (
+                <div key={f.key}>
+                  <label className="label-mono block mb-2" style={{ fontSize:'9px' }}>{f.label}</label>
+                  <div style={{ position:'relative' }}>
+                    {f.prefix && (
+                      <span style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'var(--text-muted)', fontSize:13 }}>₹</span>
+                    )}
+                    <input
+                      type={f.type}
+                      value={profileForm[f.key] || ''}
+                      onChange={e => setProfileForm(prev => ({ ...prev, [f.key]: f.type==='number' ? Number(e.target.value) : e.target.value }))}
+                      placeholder={f.placeholder}
+                      min={f.min} max={f.max}
+                      className="fin-input"
+                      style={{ paddingLeft: f.prefix ? 28 : undefined }}
+                    />
+                  </div>
+                </div>
+              ))}
+              <div>
+                <label className="label-mono block mb-2" style={{ fontSize:'9px' }}>Employment Type</label>
+                <select value={profileForm.employment} onChange={e => setProfileForm(prev => ({ ...prev, employment:e.target.value }))} className="fin-input fin-select">
+                  <option>Salaried</option>
+                  <option>Self Employed</option>
+                  <option>Business Owner</option>
+                </select>
+              </div>
+              <div>
+                <label className="label-mono block mb-2" style={{ fontSize:'9px' }}>Preferred Loan Type</label>
+                <select value={profileForm.loanType} onChange={e => setProfileForm(prev => ({ ...prev, loanType:e.target.value }))} className="fin-input fin-select">
+                  <option>Home Loan</option>
+                  <option>Personal Loan</option>
+                  <option>Car Loan</option>
+                  <option>Education Loan</option>
+                </select>
+              </div>
+            </div>
+            <button onClick={() => { setUserProfile(profileForm); setProfileSaved(true); setTimeout(() => setProfileSaved(false), 3000) }}
+              className="btn-primary px-8 py-3 text-sm mt-5 flex items-center gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+              Save Profile
+            </button>
           </div>
 
           {/* Tools grid */}

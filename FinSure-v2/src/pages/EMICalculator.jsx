@@ -36,11 +36,11 @@ function DonutChart({ principal, interest }) {
 }
 
 export default function EMICalculator() {
-  const { addBadge, incrementReports } = useStore()
-  const [loanAmount, setLoanAmount] = useState(500000)
+  const { addBadge, incrementReports, userProfile } = useStore()
+  const [loanAmount, setLoanAmount] = useState(userProfile?.desiredLoan || 500000)
   const [interestRate, setInterestRate] = useState(8.5)
-  const [tenure, setTenure] = useState(5)
-  const [monthlyIncome, setMonthlyIncome] = useState(50000)
+  const [tenure, setTenure] = useState(20)
+  const [monthlyIncome, setMonthlyIncome] = useState(userProfile?.salary || 50000)
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
 

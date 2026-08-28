@@ -51,7 +51,7 @@ function TimelineStep({ step, index, total }) {
 }
 
 export default function CreditBooster() {
-  const { addBadge } = useStore()
+  const { addBadge, userProfile } = useStore()
   const [currentScore, setCurrentScore] = useState(650)
   const [targetScore, setTargetScore] = useState(780)
   const [paymentHistory, setPaymentHistory] = useState('good') // good / fair / poor

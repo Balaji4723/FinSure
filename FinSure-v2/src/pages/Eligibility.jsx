@@ -24,13 +24,13 @@ function ScoreBar({ label, value, max, color }) {
 }
 
 export default function Eligibility() {
-  const { addBadge } = useStore()
-  const [salary, setSalary] = useState(50000)
-  const [creditScore, setCreditScore] = useState(700)
-  const [age, setAge] = useState(28)
-  const [existingEMI, setExistingEMI] = useState(0)
-  const [employmentType, setEmploymentType] = useState('Salaried')
-  const [loanType, setLoanType] = useState('Home Loan')
+  const { addBadge, userProfile } = useStore()
+  const [salary, setSalary] = useState(userProfile?.salary || 50000)
+  const [creditScore, setCreditScore] = useState(userProfile?.creditScore || 700)
+  const [age, setAge] = useState(userProfile?.age || 28)
+  const [existingEMI, setExistingEMI] = useState(userProfile?.existingEMI || 0)
+  const [employmentType, setEmploymentType] = useState(userProfile?.employment || 'Salaried')
+  const [loanType, setLoanType] = useState(userProfile?.loanType || 'Home Loan')
   const [showResult, setShowResult] = useState(false)
   const [saved, setSaved] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -89,6 +89,15 @@ export default function Eligibility() {
       <div className="max-w-7xl mx-auto px-4 md:px-10 pt-20 pb-16">
         <div className="mb-8"><BackBtn to="/" /></div>
 
+        {/* Profile nudge */}
+        {(!userProfile?.salary || userProfile.salary === 50000) && (
+          <div style={{ background:'rgba(34,211,238,0.06)', border:'1px solid rgba(34,211,238,0.2)', borderRadius:12, padding:'10px 16px', marginBottom:16, display:'flex', alignItems:'center', justifyContent:'space-between', flexWrap:'wrap', gap:8 }}>
+            <span style={{ fontSize:12, color:'var(--text-secondary)' }}>
+              Save your financial details in Profile to auto-fill all tools
+            </span>
+            <a href="/profile" style={{ fontSize:12, color:'var(--cyan)', fontWeight:600, textDecoration:'none' }}>Set up Profile →</a>
+          </div>
+        )}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">
           <div className="label-mono mb-3">FinDNA Analyzer</div>
           <h1 className="display-xl mb-4">Financial DNA Analysis</h1>

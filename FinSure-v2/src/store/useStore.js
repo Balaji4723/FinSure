@@ -8,6 +8,19 @@ export const useStore = create(
       user: null,
       setUser: (user) => set({ user }),
 
+      // ── USER FINANCIAL PROFILE (auto-fills all tools) ──
+      userProfile: {
+        salary: 60000,
+        creditScore: 720,
+        age: 30,
+        existingEMI: 0,
+        employment: 'Salaried',
+        city: '',
+        loanType: 'Home Loan',
+        desiredLoan: 2500000,
+      },
+      setUserProfile: (data) => set({ userProfile: { ...get().userProfile, ...data } }),
+
       // Reports count
       reportsCount: 0,
       incrementReports: () => set({ reportsCount: get().reportsCount + 1 }),
@@ -33,7 +46,7 @@ export const useStore = create(
       finScore: 0,
       setFinScore: (s) => set({ finScore: s }),
 
-      // Stub functions that pages may call — kept for compatibility
+      // Stubs for compatibility
       updateStreak: () => {},
       updateActivity: () => {},
       addBadge: () => {},
@@ -43,6 +56,7 @@ export const useStore = create(
     {
       name: 'finsure-store',
       partialize: (state) => ({
+        userProfile: state.userProfile,
         reportsCount: state.reportsCount,
         riskProfile: state.riskProfile,
         goal: state.goal,

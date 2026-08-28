@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Navbar from '../components/Navbar'
 import { PageShell, SliderInput, LiquidBar, BackBtn, AnimNum } from '../components/UI'
+import { useStore } from '../store/useStore'
 import { BANK_DATA } from '../data/bankRates'
 import { addDoc, collection } from 'firebase/firestore'
 import { auth, db } from '../firebase'
@@ -30,10 +31,11 @@ function ApprovalGauge({ value, color }) {
 }
 
 export default function Policy() {
+  const { userProfile } = useStore()
   const [loanType, setLoanType] = useState('')
-  const [salary, setSalary] = useState(60000)
-  const [loanAmount, setLoanAmount] = useState(2000000)
-  const [existingEmi, setExistingEmi] = useState(0)
+  const [salary, setSalary] = useState(userProfile?.salary || 60000)
+  const [loanAmount, setLoanAmount] = useState(userProfile?.desiredLoan || 2000000)
+  const [existingEmi, setExistingEmi] = useState(userProfile?.existingEMI || 0)
   const [tenure, setTenure] = useState(10)
   const [result, setResult] = useState(null)
   const [loading, setLoading] = useState(false)
