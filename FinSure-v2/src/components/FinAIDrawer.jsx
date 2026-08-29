@@ -123,7 +123,7 @@ export default function FinAIDrawer() {
 
     } catch(err) {
       console.error('FinAI error:', err)
-      setError(`Connection failed: ${err.message}. Check that ANTHROPIC_API_KEY is set in Vercel.`)
+      setError(`Connection failed: ${err.message}. Check that GEMINI_API_KEY is set in Vercel.`)
       setMessages(prev => [...prev, {
         role:'assistant',
         content:"I'm having trouble connecting right now. Please try again in a moment.",
@@ -326,7 +326,7 @@ export default function FinAIDrawer() {
               </button>
             </div>
             <p style={{ textAlign:'center', fontSize:10, color:'var(--text-muted)', paddingBottom:12 }}>
-              FinAI · Real RBI + bank data · Powered by Claude AI · Not a certified advisor
+              FinAI · Real RBI + bank data · Powered by Gemini 1.5 Flash · Not a certified advisor
             </p>
           </motion.div>
         )}
