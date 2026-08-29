@@ -12,35 +12,41 @@ export default async function handler(req, res) {
   if (!messages || !Array.isArray(messages) || messages.length === 0)
     return res.status(400).json({ error: 'Invalid messages' })
 
-  const contents = messages.map(m => ({
-    role: m.role === 'user' ? 'user' : 'model',
-    parts: [{ text: String(m.content).slice(0, 2000) }]
+  const sanitized = messages.map(m => ({
+    role: m.role === 'user' ? 'user' : 'assistant',
+    content: String(m.content).slice(0, 2000)
   }))
 
   try {
-    const apiKey = process.env.GEMINI_API_KEY
-    if (!apiKey) return res.status(500).json({ error: 'GEMINI_API_KEY not set in Vercel environment variables' })
+    const apiKey = process.env.GROQ_API_KEY
+    if (!apiKey) return res.status(500).json({ error: 'GROQ_API_KEY not set in Vercel environment variables' })
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`
-    const response = await fetch(url, {
+    const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
+      },
       body: JSON.stringify({
-        system_instruction: { parts: [{ text: systemPrompt }] },
-        contents,
-        generationConfig: { maxOutputTokens: 600, temperature: 0.4 },
+        model: 'llama-3.1-8b-instant',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...sanitized
+        ],
+        max_tokens: 600,
+        temperature: 0.4,
       })
     })
 
     if (!response.ok) {
       const err = await response.text()
-      console.error('Gemini error:', err)
+      console.error('Groq error:', err)
       return res.status(502).json({ error: 'AI service unavailable' })
     }
 
     const data = await response.json()
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim()
-    if (!text) return res.status(502).json({ error: 'Empty response from Gemini' })
+    const text = data.choices?.[0]?.message?.content?.trim()
+    if (!text) return res.status(502).json({ error: 'Empty response' })
     return res.status(200).json({ text })
 
   } catch (err) {
