@@ -130,22 +130,24 @@ export default function Profile() {
             <div className="p-7 md:p-10 flex flex-col sm:flex-row items-start sm:items-center gap-6">
               {/* Avatar */}
               {/* Avatar with completion ring */}
-              <div style={{ position:'relative', width:88, height:88, flexShrink:0 }}>
-                <svg width="88" height="88" viewBox="0 0 88 88" style={{ position:'absolute', top:0, left:0, transform:'rotate(-90deg)' }}>
-                  <circle cx="44" cy="44" r="40" fill="none" stroke="rgba(34,211,238,0.1)" strokeWidth="4"/>
-                  <circle cx="44" cy="44" r="40" fill="none"
-                    stroke={completionPct === 100 ? '#22c55e' : 'var(--cyan)'}
-                    strokeWidth="4" strokeLinecap="round"
-                    strokeDasharray={`${(completionPct/100) * 251.2} 251.2`}
-                    style={{ transition:'stroke-dasharray 1s ease', filter:`drop-shadow(0 0 4px ${completionPct===100?'#22c55e':'var(--cyan)'})` }}
+              <div style={{ position:'relative', flexShrink:0 }}>
+                {/* Outer ring SVG */}
+                <svg width="96" height="96" viewBox="0 0 96 96" style={{ position:'absolute', top:0, left:0, transform:'rotate(-90deg)', zIndex:2 }}>
+                  <circle cx="48" cy="48" r="44" fill="none" stroke="rgba(34,211,238,0.12)" strokeWidth="5"/>
+                  <circle cx="48" cy="48" r="44" fill="none"
+                    stroke={completionPct === 100 ? '#22c55e' : '#22d3ee'}
+                    strokeWidth="5" strokeLinecap="round"
+                    strokeDasharray={`${(completionPct/100) * 276.5} 276.5`}
+                    style={{ transition:'stroke-dasharray 1.2s ease', filter:`drop-shadow(0 0 6px ${completionPct===100?'#22c55e':'#22d3ee'})` }}
                   />
                 </svg>
-                <div style={{ position:'absolute', inset:6, borderRadius:16, background:'linear-gradient(135deg,var(--cyan),#818cf8)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, fontFamily:"'Space Grotesk',sans-serif", fontWeight:800, color:'#020a12' }}>
+                {/* Avatar circle */}
+                <div style={{ width:96, height:96, borderRadius:'50%', background:'linear-gradient(135deg,var(--cyan),#818cf8)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:30, fontFamily:"'Space Grotesk',sans-serif", fontWeight:800, color:'#020a12', boxShadow:'0 0 24px rgba(34,211,238,0.25)', position:'relative', zIndex:1 }}>
                   {initials}
                 </div>
-                {/* Completion % badge */}
-                <div style={{ position:'absolute', bottom:-4, right:-4, width:28, height:28, borderRadius:'50%', background: completionPct===100 ? '#22c55e' : 'rgba(4,15,26,0.95)', border:`2px solid ${completionPct===100?'#22c55e':'var(--cyan)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:9, fontWeight:700, color: completionPct===100 ? '#020a12' : 'var(--cyan)', fontFamily:"'Space Grotesk',sans-serif" }}>
-                  {completionPct===100 ? '✓' : `${completionPct}%`}
+                {/* Completion label below */}
+                <div style={{ position:'absolute', bottom:-20, left:'50%', transform:'translateX(-50%)', whiteSpace:'nowrap', fontSize:11, fontWeight:700, fontFamily:"'Space Grotesk',sans-serif", color: completionPct===100 ? '#22c55e' : 'var(--cyan)', letterSpacing:'0.04em' }}>
+                  {completionPct}% complete
                 </div>
               </div>
               {/* Info */}

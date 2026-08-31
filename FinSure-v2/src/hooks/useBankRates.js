@@ -23,7 +23,7 @@ export function useBankRates() {
       })
       .catch(() => {
         // Fallback to local real data
-        setBankRates({ banks: BANK_DATA, rbi: RBI_RATES, source: 'Local (RBI June 2025)', success: true })
+        setBankRates({ banks: BANK_DATA, rbi: RBI_RATES, source: 'RBI MPC MPC August 2026)', success: true })
         setRatesLastFetched(Date.now())
       })
       .finally(() => setLoading(false))
@@ -32,7 +32,7 @@ export function useBankRates() {
   return {
     banks: bankRates?.banks || BANK_DATA,
     rbi: bankRates?.rbi || RBI_RATES,
-    source: bankRates?.source || 'RBI June 2025',
+    source: bankRates?.source || 'RBI MPC August 2026',
     loading,
     error
   }
