@@ -37,6 +37,20 @@ export default function Profile() {
   const navigate = useNavigate()
   const { userProfile, setUserProfile } = useStore()
   const [profileForm, setProfileForm] = useState(userProfile)
+
+  // Profile completion
+  const profileFields = [
+    userProfile?.salary > 0 && userProfile?.salary !== 60000,
+    userProfile?.creditScore > 0 && userProfile?.creditScore !== 720,
+    userProfile?.age > 0 && userProfile?.age !== 30,
+    userProfile?.existingEMI >= 0,
+    !!userProfile?.employment,
+    !!userProfile?.city && userProfile.city.length > 0,
+    !!userProfile?.loanType,
+    userProfile?.desiredLoan > 0 && userProfile?.desiredLoan !== 2500000,
+  ]
+  const completedFields = profileFields.filter(Boolean).length
+  const completionPct = Math.round((completedFields / profileFields.length) * 100)
   const [profileSaved, setProfileSaved] = useState(false)
   const [user, setUser] = useState(null)
   const [stats, setStats] = useState({ loans:0, emis:0, eligibility:0, goals:0 })
@@ -115,8 +129,24 @@ export default function Profile() {
             <div style={{ height:6, background:'linear-gradient(90deg,var(--cyan),#818cf8,#f472b6)' }} />
             <div className="p-7 md:p-10 flex flex-col sm:flex-row items-start sm:items-center gap-6">
               {/* Avatar */}
-              <div style={{ width:80, height:80, borderRadius:20, background:'linear-gradient(135deg,var(--cyan),#818cf8)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, fontSize:28, fontFamily:"'Space Grotesk',sans-serif", fontWeight:800, color:'#020a12', boxShadow:'0 0 30px rgba(34,211,238,0.3)' }}>
-                {initials}
+              {/* Avatar with completion ring */}
+              <div style={{ position:'relative', width:88, height:88, flexShrink:0 }}>
+                <svg width="88" height="88" viewBox="0 0 88 88" style={{ position:'absolute', top:0, left:0, transform:'rotate(-90deg)' }}>
+                  <circle cx="44" cy="44" r="40" fill="none" stroke="rgba(34,211,238,0.1)" strokeWidth="4"/>
+                  <circle cx="44" cy="44" r="40" fill="none"
+                    stroke={completionPct === 100 ? '#22c55e' : 'var(--cyan)'}
+                    strokeWidth="4" strokeLinecap="round"
+                    strokeDasharray={`${(completionPct/100) * 251.2} 251.2`}
+                    style={{ transition:'stroke-dasharray 1s ease', filter:`drop-shadow(0 0 4px ${completionPct===100?'#22c55e':'var(--cyan)'})` }}
+                  />
+                </svg>
+                <div style={{ position:'absolute', inset:6, borderRadius:16, background:'linear-gradient(135deg,var(--cyan),#818cf8)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, fontFamily:"'Space Grotesk',sans-serif", fontWeight:800, color:'#020a12' }}>
+                  {initials}
+                </div>
+                {/* Completion % badge */}
+                <div style={{ position:'absolute', bottom:-4, right:-4, width:28, height:28, borderRadius:'50%', background: completionPct===100 ? '#22c55e' : 'rgba(4,15,26,0.95)', border:`2px solid ${completionPct===100?'#22c55e':'var(--cyan)'}`, display:'flex', alignItems:'center', justifyContent:'center', fontSize:9, fontWeight:700, color: completionPct===100 ? '#020a12' : 'var(--cyan)', fontFamily:"'Space Grotesk',sans-serif" }}>
+                  {completionPct===100 ? '✓' : `${completionPct}%`}
+                </div>
               </div>
               {/* Info */}
               <div className="flex-1 min-w-0">

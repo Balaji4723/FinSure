@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { Suspense, lazy } from 'react'
 import { useSessionTimeout } from './hooks/useBankRates'
 import FinAIDrawer from './components/FinAIDrawer'
+import ProfileNudge from './components/ProfileNudge'
 
 const Home         = lazy(() => import('./pages/Home'))
 const Login        = lazy(() => import('./pages/Login'))
@@ -72,6 +73,8 @@ function AppInner() {
 
       {/* FinAI floating drawer — visible on all pages when logged in */}
       {loggedIn && <FinAIDrawer />}
+      {/* Profile completion nudge */}
+      <ProfileNudge />
     </>
   )
 }
