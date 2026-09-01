@@ -39,15 +39,17 @@ export default function Profile() {
   const [profileForm, setProfileForm] = useState(userProfile)
 
   // Profile completion
+  // Completion based on whether user has explicitly saved profile
+  // Track via profileSavedOnce in store
   const profileFields = [
-    userProfile?.salary > 0 && userProfile?.salary !== 60000,
-    userProfile?.creditScore > 0 && userProfile?.creditScore !== 720,
-    userProfile?.age > 0 && userProfile?.age !== 30,
-    userProfile?.existingEMI >= 0,
+    (userProfile?.salary || 0) > 0,
+    (userProfile?.creditScore || 0) > 0,
+    (userProfile?.age || 0) >= 18,
+    (userProfile?.existingEMI || 0) >= 0 && userProfile?.existingEMI !== undefined,
     !!userProfile?.employment,
-    !!userProfile?.city && userProfile.city.length > 0,
+    !!userProfile?.city && userProfile.city.trim().length > 0,
     !!userProfile?.loanType,
-    userProfile?.desiredLoan > 0 && userProfile?.desiredLoan !== 2500000,
+    (userProfile?.desiredLoan || 0) > 0,
   ]
   const completedFields = profileFields.filter(Boolean).length
   const completionPct = Math.round((completedFields / profileFields.length) * 100)
